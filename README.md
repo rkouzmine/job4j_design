@@ -1,5 +1,7 @@
 ## О проекте
 
+![CI GitHubAction](https://github.com/rkouzmine/job4j_tracker/actions/workflows/maven.yml/badge.svg)
+
 ## Темы уроков, которые будут пройдены на курсе
 - Структуры данных и алгоритмы
 - Ввод-вывод
