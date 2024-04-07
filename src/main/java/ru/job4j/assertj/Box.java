@@ -49,4 +49,12 @@ public class Box {
             default -> 0;
         };
     }
+<<<<<<< HEAD
+=======
+
+    public static void main(String[] args) {
+        Box box = new Box(6, 6);
+        System.out.println(box.getArea());
+    }
+>>>>>>> origin/master
 }
