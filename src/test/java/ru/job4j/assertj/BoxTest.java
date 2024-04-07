@@ -10,28 +10,40 @@ class BoxTest {
     void isThisSphere() {
         Box box = new Box(0, 10);
         String name = box.whatsThis();
-        assertThat(name).isEqualTo("Sphere");
+        assertThat(name)
+                .isNotEmpty()
+                .isEqualTo("Sphere");
     }
 
     @Test
     void isThisTetrahedron() {
         Box box = new Box(4, 4);
         String name = box.whatsThis();
-        assertThat(name).isEqualTo("Tetrahedron");
+        assertThat(name)
+                .isNotEmpty()
+                .endsWith("dron")
+                .isEqualTo("Tetrahedron");
     }
 
     @Test
     void isThisCube() {
         Box box = new Box(8, 4);
         String name = box.whatsThis();
-        assertThat(name).isEqualTo("Cube");
+        assertThat(name)
+                .isNotEmpty()
+                .isNotBlank()
+                .contains("ub")
+                .isEqualTo("Cube");
     }
 
     @Test
     void isThisUNKNOWN() {
         Box box = new Box(6, 0);
         String name = box.whatsThis();
-        assertThat(name).isEqualTo("Unknown object");
+        assertThat(name)
+                .isNotEmpty()
+                .startsWith("Unknown")
+                .isEqualTo("Unknown object");
     }
 
     @Test
@@ -49,7 +61,9 @@ class BoxTest {
     void isThisNegative() {
         Box box = new Box(5, 8);
         int result = box.getNumberOfVertices();
-        assertThat(result).isEqualTo(-1);
+        assertThat(result)
+                .isNegative()
+                .isEqualTo(-1);
     }
 
     @Test
@@ -70,7 +84,11 @@ class BoxTest {
     void whenAreaIsTrue() {
         Box box = new Box(4, 5);
         double result = box.getArea();
-        assertThat(result).isEqualTo(43.3d, withPrecision(0.01d));
+        assertThat(result)
+                .isEqualTo(43.30d, withPrecision(0.01d))
+                .isCloseTo(43.33d, withPrecision(0.03d))
+                .isGreaterThan(43.28)
+                .isLessThan(43.32);
     }
 
     @Test
