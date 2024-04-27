@@ -48,6 +48,9 @@ public class ListUtils {
     }
 
     public static <T> void removeAll(List<T> list, List<T> elements) {
+        if (list == null || elements == null) {
+            throw new IllegalArgumentException("List and elements cannot be null");
+        }
         ListIterator<T> iterator = list.listIterator();
         while (iterator.hasNext()) {
             if (elements.contains(iterator.next())) {
