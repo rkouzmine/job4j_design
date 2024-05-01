@@ -3,6 +3,7 @@ package ru.job4j.map;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Calendar;
 
 public class User {
     private final String name;
@@ -34,7 +35,7 @@ public class User {
     }
 
     public static void main(String[] args) {
-        Calendar birthday = new Calendar();
+        Calendar birthday = Calendar.getInstance();
         User userFirst = new User("user", 2, birthday);
         User userSecond = new User("user", 2, birthday);
         Map<User, Object> map = new HashMap<>();
