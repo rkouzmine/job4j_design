@@ -1,9 +1,6 @@
 package ru.job4j.map;
 
-import java.util.ConcurrentModificationException;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
@@ -48,14 +45,13 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public V get(K key) {
-//        int keyHash = hash(key.hashCode());
        int keyHash = hash(Objects.hashCode(key));
         int indexArray = indexFor(keyHash);
         boolean isFound = table[indexArray] != null;
         if (isFound) {
             K currentKey = table[indexArray].key;
-            int currenthash = hash(currentKey.hashCode());
-            if (currenthash == keyHash && currentKey.equals(key)) {
+            int currentHash = hash(currentKey.hashCode());
+            if (currentHash == keyHash && currentKey.equals(key)) {
                 return table[indexArray].value;
             }
         }
@@ -69,10 +65,11 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         boolean isFound = table[indexArray] != null;
         if (isFound) {
             K currentKey = table[indexArray].key;
-            int currenthash = hash(currentKey.hashCode());
-            if (currenthash == keyHash && currentKey.equals(key)) {
+            int currentHash = hash(currentKey.hashCode());
+            if (currentHash == keyHash && currentKey.equals(key)) {
+                table[indexArray] = null;
                 count--;
-                return table[indexArray] == null;
+                modCount++;
             }
         }
         return isFound;
@@ -116,6 +113,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     }
 
     public static void main(String[] args) {
+        Map<Integer, String> mapa = new HashMap<>();
         NonCollisionMap<Integer, String> map = new NonCollisionMap<>();
         System.out.println(map.hash(0));
         System.out.println(map.hash(65535));
