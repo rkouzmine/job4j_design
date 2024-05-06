@@ -22,16 +22,16 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         if (count >= capacity * LOAD_FACTOR) {
             expand();
         }
-        Objects.requireNonNull(key);
-        int keyHash = hash(key.hashCode());
+        int keyHash = hash(Objects.hashCode(key));
         int indexArray = indexFor(keyHash);
-        boolean isFound = table[indexArray] == null;
-        if (isFound) {
+        boolean isEmpty = table[indexArray] == null;
+        if (isEmpty) {
             table[indexArray] = new MapEntry<>(key, value);
             count++;
             modCount++;
         }
-        return isFound;
+        return isEmpty;
+
     }
 
     private int hash(int hashCode) {
@@ -48,13 +48,14 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public V get(K key) {
-        int keyHash = hash(key.hashCode());
+//        int keyHash = hash(key.hashCode());
+       int keyHash = hash(Objects.hashCode(key));
         int indexArray = indexFor(keyHash);
-        boolean result = table[indexArray] != null;
-        if (result) {
+        boolean isFound = table[indexArray] != null;
+        if (isFound) {
             K currentKey = table[indexArray].key;
-            int hash = hash(currentKey.hashCode());
-            if (hash == keyHash && currentKey.equals(key)) {
+            int currenthash = hash(currentKey.hashCode());
+            if (currenthash == keyHash && currentKey.equals(key)) {
                 return table[indexArray].value;
             }
         }
@@ -63,7 +64,18 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public boolean remove(K key) {
-        return false;
+        int keyHash = hash(key.hashCode());
+        int indexArray = indexFor(keyHash);
+        boolean isFound = table[indexArray] != null;
+        if (isFound) {
+            K currentKey = table[indexArray].key;
+            int currenthash = hash(currentKey.hashCode());
+            if (currenthash == keyHash && currentKey.equals(key)) {
+                count--;
+                return table[indexArray] == null;
+            }
+        }
+        return isFound;
     }
 
     @Override
