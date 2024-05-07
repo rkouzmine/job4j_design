@@ -14,13 +14,17 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     private MapEntry<K, V>[] table = new MapEntry[capacity];
 
+    private int getIndex(K key) {
+        return hash(Objects.hashCode(key));
+    }
+
     @Override
     public boolean put(K key, V value) {
         if (count >= capacity * LOAD_FACTOR) {
             expand();
         }
-        int keyHash = hash(Objects.hashCode(key));
-        int indexArray = indexFor(keyHash);
+        int hash = getIndex(key);
+        int indexArray = indexFor(hash);
         boolean isEmpty = table[indexArray] == null;
         if (isEmpty) {
             table[indexArray] = new MapEntry<>(key, value);
@@ -28,7 +32,6 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
             modCount++;
         }
         return isEmpty;
-
     }
 
     private int hash(int hashCode) {
@@ -43,18 +46,17 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         MapEntry<K, V>[] newTable = new MapEntry[capacity * 2];
         for (MapEntry<K, V> mapEntry : table) {
             if (mapEntry != null) {
-                int keyHash = hash(Objects.hashCode(mapEntry.key));
+                int keyHash = getIndex(mapEntry.key);
                 int newIndexArray = indexFor(keyHash);
                 newTable[newIndexArray] = mapEntry;
             }
         }
         table = newTable;
-
     }
 
     @Override
     public V get(K key) {
-       int keyHash = hash(Objects.hashCode(key));
+        int keyHash = getIndex(key);
         int indexArray = indexFor(keyHash);
         boolean isFound = table[indexArray] != null;
         V value = null;
@@ -69,7 +71,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public boolean remove(K key) {
-        int keyHash = hash(Objects.hashCode(key));
+        int keyHash = getIndex(key);
         int indexArray = indexFor(keyHash);
         boolean isFound = table[indexArray] != null;
         if (isFound) {
