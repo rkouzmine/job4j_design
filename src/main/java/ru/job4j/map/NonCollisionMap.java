@@ -40,6 +40,15 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     }
 
     private void expand() {
+        MapEntry<K, V>[] newTable = new MapEntry[capacity * 2];
+        for (MapEntry<K, V> mapEntry : table) {
+            if (mapEntry != null) {
+                int keyHash = hash(Objects.hashCode(mapEntry.key));
+                int newIndexArray = indexFor(keyHash);
+                newTable[newIndexArray] = mapEntry;
+            }
+        }
+        table = newTable;
 
     }
 
@@ -50,7 +59,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         boolean isFound = table[indexArray] != null;
         if (isFound) {
             K currentKey = table[indexArray].key;
-            int currentHash = hash(currentKey.hashCode());
+            int currentHash = hash(Objects.hashCode(key));
             if (currentHash == keyHash && currentKey.equals(key)) {
                 return table[indexArray].value;
             }
@@ -78,7 +87,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     @Override
     public Iterator<K> iterator() {
         return new Iterator<K>() {
-            int point;
+            private int point;
             final int expectedModCount = modCount;
             @Override
             public boolean hasNext() {
