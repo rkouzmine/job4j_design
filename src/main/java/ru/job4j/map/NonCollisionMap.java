@@ -57,25 +57,24 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
        int keyHash = hash(Objects.hashCode(key));
         int indexArray = indexFor(keyHash);
         boolean isFound = table[indexArray] != null;
+        V value = null;
         if (isFound) {
             K currentKey = table[indexArray].key;
-            int currentHash = hash(Objects.hashCode(key));
-            if (currentHash == keyHash && currentKey.equals(key)) {
-                return table[indexArray].value;
+            if (Objects.equals(currentKey, key)) {
+                value = table[indexArray].value;
             }
         }
-        return null;
+        return value;
     }
 
     @Override
     public boolean remove(K key) {
-        int keyHash = hash(key.hashCode());
+        int keyHash = hash(Objects.hashCode(key));
         int indexArray = indexFor(keyHash);
         boolean isFound = table[indexArray] != null;
         if (isFound) {
             K currentKey = table[indexArray].key;
-            int currentHash = hash(currentKey.hashCode());
-            if (currentHash == keyHash && currentKey.equals(key)) {
+            if (Objects.equals(currentKey, key)) {
                 table[indexArray] = null;
                 count--;
                 modCount++;
@@ -122,7 +121,6 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     }
 
     public static void main(String[] args) {
-        Map<Integer, String> mapa = new HashMap<>();
         NonCollisionMap<Integer, String> map = new NonCollisionMap<>();
         System.out.println(map.hash(0));
         System.out.println(map.hash(65535));
