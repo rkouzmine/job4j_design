@@ -19,13 +19,6 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         return indexFor(hash);
     }
 
-    private MapEntry<K, V> findEntry(K key) {
-        int hash = getHash(key);
-        int indexArray = indexFor(hash);
-        MapEntry<K, V> mapEntry = table[indexArray];
-        return (mapEntry != null && Objects.equals(mapEntry.key, key)) ? mapEntry : null;
-    }
-
     @Override
     public boolean put(K key, V value) {
         if (count >= capacity * LOAD_FACTOR) {
