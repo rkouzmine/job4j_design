@@ -14,7 +14,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     private MapEntry<K, V>[] table = new MapEntry[capacity];
 
-    private int getHash(K key) {
+    private int getIndex(K key) {
         int hash = hash(Objects.hashCode(key));
         return indexFor(hash);
     }
@@ -24,8 +24,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         if (count >= capacity * LOAD_FACTOR) {
             expand();
         }
-        int hash = getHash(key);
-        int indexArray = indexFor(hash);
+        int indexArray = getIndex(key);
         boolean isEmpty = table[indexArray] == null;
         if (isEmpty) {
             table[indexArray] = new MapEntry<>(key, value);
@@ -47,8 +46,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         MapEntry<K, V>[] newTable = new MapEntry[capacity * 2];
         for (MapEntry<K, V> mapEntry : table) {
             if (mapEntry != null) {
-                int hash = getHash(mapEntry.key);
-                int newIndexArray = indexFor(hash);
+                int newIndexArray = getIndex(mapEntry.key);
                 newTable[newIndexArray] = mapEntry;
             }
         }
@@ -57,31 +55,25 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public V get(K key) {
-        int hash = getHash(key);
-        int indexArray = indexFor(hash);
-        boolean isFound = table[indexArray] != null;
+        int indexArray = getIndex(key);
+        boolean isFound = table[indexArray] != null
+                && Objects.equals(table[indexArray].key, key);
         V value = null;
         if (isFound) {
-            K currentKey = table[indexArray].key;
-            if (Objects.equals(currentKey, key)) {
-                value = table[indexArray].value;
-            }
+            value = table[indexArray].value;
         }
         return value;
     }
 
     @Override
     public boolean remove(K key) {
-        int hash = getHash(key);
-        int indexArray = indexFor(hash);
-        boolean isFound = table[indexArray] != null;
+        int indexArray = getIndex(key);
+        boolean isFound = table[indexArray] != null
+                && Objects.equals(table[indexArray].key, key);
         if (isFound) {
-            K currentKey = table[indexArray].key;
-            if (Objects.equals(currentKey, key)) {
-                table[indexArray] = null;
-                count--;
-                modCount++;
-            }
+            table[indexArray] = null;
+            count--;
+            modCount++;
         }
         return isFound;
     }
@@ -122,16 +114,5 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
             this.key = key;
             this.value = value;
         }
-    }
-
-    public static void main(String[] args) {
-        NonCollisionMap<Integer, String> map = new NonCollisionMap<>();
-        System.out.println(map.hash(0));
-        System.out.println(map.hash(65535));
-        System.out.println(map.hash(65536));
-
-        System.out.println(map.indexFor(0));
-        System.out.println(map.indexFor(7));
-        System.out.println(map.indexFor(8));
     }
 }

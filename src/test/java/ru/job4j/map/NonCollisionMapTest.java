@@ -2,8 +2,12 @@ package ru.job4j.map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import java.util.*;
+
 import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class NonCollisionMapTest {
 
@@ -149,5 +153,59 @@ class NonCollisionMapTest {
         SimpleMap<Integer, String> map = new NonCollisionMap<>();
         assertThat(map.put(0, "0")).isTrue();
         assertThat(map.get(null)).isNull();
+    }
+
+    @Test
+    void whenCheckPutAndGet() {
+        SimpleMap<Integer, String> simpleMap = new NonCollisionMap<>();
+        simpleMap.put(1, "First");
+        simpleMap.put(2, "Second");
+        simpleMap.put(3, "Third");
+        assertThat(simpleMap).hasSize(3).contains(1, 2, 3);
+        assertThat(simpleMap.get(0)).isNull();
+        assertThat(simpleMap.put(null, "Zero")).isTrue();
+        simpleMap.put(1, "One");
+        simpleMap.put(2, "Two");
+        simpleMap.put(3, "Three");
+        assertThat(simpleMap.get(null)).isEqualTo("Zero");
+        assertThat(simpleMap).hasSize(4).contains(null, 1, 2, 3);
+    }
+
+    @Test
+    void whenCheckPutAndPutIsFalse() {
+        assertThat(map.put(null, "Zero")).isTrue();
+        assertThat(map.put(null, "Zero")).isFalse();
+        assertThat(map).hasSize(5);
+    }
+
+    @Test
+    void whenCheckGetIsNull() {
+        assertThat(map.get(10)).isNull();
+    }
+
+    @Test
+    void whenGetExistingKey() {
+        SimpleMap<String, Integer> simpleMap = new NonCollisionMap<>();
+        simpleMap.put("First", 1);
+        simpleMap.put("Second", 2);
+        simpleMap.put("Third", 3);
+        Integer result = simpleMap.get("First");
+        assertEquals(1, result.intValue());
+    }
+
+    @Test
+    void whenCheckRemoveAndRemoveIsFalse() {
+        assertThat(map.remove(1)).isTrue();
+        assertThat(map.remove(1)).isFalse();
+    }
+
+    @Test
+    void whenCheckRemoveIsFalse() {
+        assertThat(map.remove(10)).isFalse();
+    }
+
+    @Test
+    void whenCheckRemoveNullIsFalse() {
+        assertThat(map.remove(null)).isFalse();
     }
 }
