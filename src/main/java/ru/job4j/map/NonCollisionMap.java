@@ -19,9 +19,17 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
         return indexFor(hash);
     }
 
+    private boolean checkHashAndEquals(K key) {
+        int indexArray = getIndex(key);
+        int hash = hash(Objects.hashCode(key));
+        return table[indexArray] != null
+                && hash == hash(Objects.hashCode(table[indexArray].key))
+                && Objects.equals(table[indexArray].key, key);
+    }
+
     @Override
     public boolean put(K key, V value) {
-        if (count >= capacity * LOAD_FACTOR) {
+        if (count >= table.length * LOAD_FACTOR) {
             expand();
         }
         int indexArray = getIndex(key);
@@ -39,11 +47,12 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     }
 
     private int indexFor(int hash) {
-        return hash & (table.length - 1);
+        return hash & (capacity - 1);
     }
 
     private void expand() {
-        MapEntry<K, V>[] newTable = new MapEntry[capacity * 2];
+        capacity *= 2;
+        MapEntry<K, V>[] newTable = new MapEntry[capacity];
         for (MapEntry<K, V> mapEntry : table) {
             if (mapEntry != null) {
                 int newIndexArray = getIndex(mapEntry.key);
@@ -56,8 +65,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     @Override
     public V get(K key) {
         int indexArray = getIndex(key);
-        boolean isFound = table[indexArray] != null
-                && Objects.equals(table[indexArray].key, key);
+        boolean isFound = checkHashAndEquals(key);
         V value = null;
         if (isFound) {
             value = table[indexArray].value;
@@ -68,8 +76,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     @Override
     public boolean remove(K key) {
         int indexArray = getIndex(key);
-        boolean isFound = table[indexArray] != null
-                && Objects.equals(table[indexArray].key, key);
+        boolean isFound = checkHashAndEquals(key);
         if (isFound) {
             table[indexArray] = null;
             count--;

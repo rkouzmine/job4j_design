@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
+import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -207,5 +208,31 @@ class NonCollisionMapTest {
     @Test
     void whenCheckRemoveNullIsFalse() {
         assertThat(map.remove(null)).isFalse();
+    }
+
+    @Test
+    void whenTwoObjectsAreTheSame() {
+        Calendar birthday = Calendar.getInstance();
+        SimpleMap<User, Object> simpleMap = new NonCollisionMap<>();
+        User userFirst = new User("user", 2, birthday);
+        User userSecond = new User("user", 2, birthday);
+        simpleMap.put(userFirst, new Object());
+        simpleMap.put(userSecond, new Object());
+        assertThat(simpleMap).hasSize(1);
+        simpleMap.remove(userSecond);
+        assertThat(simpleMap).isEmpty();
+    }
+
+    @Test
+    void whenTwoObjectsAreDifferent() {
+        Calendar birthday = Calendar.getInstance();
+        SimpleMap<User, Object> simpleMap = new NonCollisionMap<>();
+        User userFirst = new User("user", 0, birthday);
+        User userSecond = new User("username", 0, birthday);
+        simpleMap.put(userFirst, new Object());
+        simpleMap.put(userSecond, new Object());
+        assertThat(simpleMap).hasSize(2);
+        simpleMap.remove(userSecond);
+        assertThat(simpleMap).hasSize(1);
     }
 }
