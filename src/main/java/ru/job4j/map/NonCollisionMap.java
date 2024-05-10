@@ -15,8 +15,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
     private MapEntry<K, V>[] table = new MapEntry[capacity];
 
     private int getIndex(K key) {
-        int hash = hash(Objects.hashCode(key));
-        return indexFor(hash);
+        return indexFor(hash(Objects.hashCode(key)));
     }
 
     private boolean checkHashAndEquals(K key) {
@@ -29,7 +28,7 @@ public class NonCollisionMap<K, V> implements SimpleMap<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        if (count >= table.length * LOAD_FACTOR) {
+        if (count >= capacity * LOAD_FACTOR) {
             expand();
         }
         int indexArray = getIndex(key);
