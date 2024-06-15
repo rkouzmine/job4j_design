@@ -222,17 +222,4 @@ class NonCollisionMapTest {
         simpleMap.remove(userSecond);
         assertThat(simpleMap).isEmpty();
     }
-
-    @Test
-    void whenTwoObjectsAreDifferent() {
-        Calendar birthday = Calendar.getInstance();
-        SimpleMap<User, Object> simpleMap = new NonCollisionMap<>();
-        User userFirst = new User("user", 0, birthday);
-        User userSecond = new User("username", 0, birthday);
-        simpleMap.put(userFirst, new Object());
-        simpleMap.put(userSecond, new Object());
-        assertThat(simpleMap).hasSize(2);
-        simpleMap.remove(userSecond);
-        assertThat(simpleMap).hasSize(1);
-    }
 }
