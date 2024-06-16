@@ -27,8 +27,21 @@ public class LogFilter {
         return filteredLines;
     }
 
+    public void saveTo(String out) {
+        var data = filter();
+        try (PrintWriter output = new PrintWriter(
+                new BufferedOutputStream(
+                        new FileOutputStream(out)
+                ))) {
+            for (String str : data) {
+                output.println(str);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static void main(String[] args) {
-        LogFilter logFilter = new LogFilter("data/log.txt");
-        logFilter.filter().forEach(System.out::println);
+        new LogFilter("data/log.txt").saveTo("data/404.txt");
     }
 }
