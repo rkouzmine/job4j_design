@@ -21,7 +21,11 @@ public class Analysis {
                     }
                 } else if (start != null) {
                     end = data;
+<<<<<<< HEAD
                     result.append(start).append(";").append(end).append(";").append(ln);
+=======
+                    result.append(start).append(";").append(end).append(ln);
+>>>>>>> origin/master
                     start = null;
                     end = null;
                 }
