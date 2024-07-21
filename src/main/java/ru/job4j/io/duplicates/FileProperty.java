@@ -30,6 +30,14 @@ public class FileProperty {
     }
 
     @Override
+    public String toString() {
+        return "FileProperty{"
+                + "size=" + size
+                + ", name='" + name + '\''
+                + '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
