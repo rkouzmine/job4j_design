@@ -16,31 +16,34 @@ public class ArgsName {
     }
 
     private void parse(String[] args) {
+        checks(args);
+        for (String arg : args) {
+            var str = arg.split("=", 2);
+            var key = str[0];
+            var value = str[1];
+            values.put(key.substring(1), value);
+        }
+    }
+
+    private void checks(String[] args) {
         for (String arg : args) {
             if (!arg.contains("=")) {
                 throw new IllegalArgumentException(String.format(
                         "Error: This argument '%s' does not contain an equal sign", arg));
             }
-
-            var str = arg.split("=", 2);
-            var key = str[0];
-            var value = str[1];
-
-            if (!key.startsWith("-")) {
+            if (!arg.startsWith("-")) {
                 throw new IllegalArgumentException(String.format(
                         "Error: This argument '%s' does not start with a '-' character", arg));
             }
-            if ("-".equals(key)) {
-                throw new IllegalArgumentException(String.format(
-                        "Error: This argument '%s' does not contain a key", arg));
-            }
-            if (value.isBlank()) {
+            if (arg.matches("^-[A-Za-z0-9]+=$")) {
                 throw new IllegalArgumentException(String.format(
                         "Error: This argument '%s' does not contain a value", arg));
             }
-            values.put(key.substring(1), value);
+            if (arg.matches("^-=.*$")) {
+                throw new IllegalArgumentException(String.format(
+                        "Error: This argument '%s' does not contain a key", arg));
+            }
         }
-
     }
 
     public static ArgsName of(String[] args) {
