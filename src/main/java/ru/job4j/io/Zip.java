@@ -5,8 +5,6 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.zip.*;
 
-import static ru.job4j.io.ArgsName.*;
-
 public class Zip {
     public void packFiles(List<Path> sources, File target) {
         try (ZipOutputStream zip = new ZipOutputStream(
