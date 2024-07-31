@@ -35,7 +35,8 @@ public class Zip {
         }
     }
 
-    private static void validateArgs(String[] args, ArgsName values) {
+    private static void validateArgs(String[] args) {
+        ArgsName values = ArgsName.of(args);
         if (args.length != 3) {
             throw new IllegalArgumentException("Not all arguments are specified");
         }
@@ -51,8 +52,8 @@ public class Zip {
     }
 
     public static void main(String[] args) throws IOException {
+        validateArgs(args);
         ArgsName values = ArgsName.of(args);
-        validateArgs(args, values);
         String source = values.get("d");
         String exclude = values.get("e");
         String target = values.get("o");
