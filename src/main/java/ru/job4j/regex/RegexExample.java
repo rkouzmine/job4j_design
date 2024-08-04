@@ -1,5 +1,6 @@
 package ru.job4j.regex;
 
+import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,5 +77,26 @@ public class RegexExample {
         String result = matcher9.replaceAll("Job4j");
         System.out.println(result);
         System.out.println();
+
+        System.out.println("String.split()");
+        String string = "123+456:2/#789";
+        String[] strings = string.split("\\D+");
+        System.out.println(Arrays.toString(strings));
+        System.out.println();
+
+        Pattern pattern4 = Pattern.compile("\\b\\d{2}\\.\\d{2}\\.\\d{4}\\b");
+        String text10 = "24.04.1987 11.11.111111 99.99.99991 99.99.9999 99999999 0000.00.00";
+        Matcher matcher10 = pattern4.matcher(text10);
+        while (matcher10.find()) {
+            System.out.println("Найдено совпадение: " + matcher10.group());
+        }
+        System.out.println();
+
+        Pattern pattern5 = Pattern.compile("\\S{1,}@\\S{1,}\\.\\S{1,}");
+        String email = "rkouzmine@ya.ru example@mail.ru ggwp@example.com";
+        Matcher matcher11 = pattern5.matcher(email);
+        while (matcher11.find()) {
+            System.out.println("Найдено совпадение: " + matcher11.group());
+        }
     }
 }
