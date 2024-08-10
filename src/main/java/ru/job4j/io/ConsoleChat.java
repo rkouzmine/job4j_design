@@ -1,6 +1,8 @@
 package ru.job4j.io;
 
 import java.io.*;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 public class ConsoleChat {
@@ -69,17 +71,17 @@ public class ConsoleChat {
     }
 
     private void saveLog(List<String> log) {
-        try (PrintWriter out = new PrintWriter(new FileWriter(path, true))) {
+
+        try (PrintWriter out = new PrintWriter(new FileWriter(path, StandardCharsets.UTF_8, true))) {
             log.forEach(out::println);
         } catch (IOException e) {
             e.printStackTrace();
         }
-
     }
 
     public static void main(String[] args) {
-        ConsoleChat consoleChat = new ConsoleChat("data\\chatLog.txt",
-                "data\\botAnswers.txt");
+        ConsoleChat consoleChat = new ConsoleChat("data\\answers_log.txt",
+                "data\\random_question.txt");
         consoleChat.run();
     }
 }
