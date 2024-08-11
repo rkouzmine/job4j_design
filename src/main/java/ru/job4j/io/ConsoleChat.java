@@ -1,7 +1,6 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
@@ -21,10 +20,11 @@ public class ConsoleChat {
 
     public void run() {
         List<String> log = new ArrayList<>();
+        List<String> listQuestions = readPhrases();
         Scanner scanner = new Scanner(System.in);
         Random random = new Random();
         String phrase;
-        boolean botSays = true;
+        boolean isBotSays = true;
         String greetings = """
                 Bot: Добро пожаловать в консольный чат!
                 Я буду задавать тебе вопросы, а ты будешь отвечать на них 'да' или 'нет'.
@@ -33,24 +33,24 @@ public class ConsoleChat {
         log.add(greetings);
 
         do {
-            String randomQuestion = readPhrases().get(random.nextInt(readPhrases().size()));
+            String randomQuestion = listQuestions.get(random.nextInt(listQuestions.size()));
             phrase = scanner.nextLine().trim().toLowerCase();
             log.add("User: " + phrase);
             if (OUT.equals(phrase)) {
                 break;
             } else if (STOP.equals(phrase)) {
-                botSays = false;
+                isBotSays = false;
             } else if (CONTINUE.equals(phrase)) {
                 System.out.println("Bot: " + randomQuestion);
                 log.add("Bot: " + randomQuestion);
-                botSays = true;
+                isBotSays = true;
             } else if (YEAH.equals(phrase) || NOPE.equals(phrase)) {
-                if (botSays) {
+                if (isBotSays) {
                     System.out.println("Bot: " + randomQuestion);
                     log.add("Bot: " + randomQuestion);
                 }
             } else {
-                if (botSays) {
+                if (isBotSays) {
                     System.out.println("Пожалуйста, отвечайте 'да' или 'нет'.");
                     log.add("Bot: Пожалуйста, отвечайте 'да' или 'нет'.");
                 }
@@ -71,7 +71,6 @@ public class ConsoleChat {
     }
 
     private void saveLog(List<String> log) {
-
         try (PrintWriter out = new PrintWriter(new FileWriter(path, StandardCharsets.UTF_8, true))) {
             log.forEach(out::println);
         } catch (IOException e) {
