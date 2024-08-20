@@ -17,10 +17,10 @@ public class Car implements Serializable {
 
     @Override
     public String toString() {
-        return "Car{" +
-                "brand='" + brand + '\'' +
-                ", model='" + model + '\'' +
-                ", year=" + year +
-                '}';
+        return "Car{"
+                + "brand='" + brand + '\''
+                + ", model='" + model + '\''
+                + ", year=" + year
+                + '}';
     }
 }
