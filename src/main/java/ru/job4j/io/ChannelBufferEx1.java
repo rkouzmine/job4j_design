@@ -6,7 +6,7 @@ import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 
-public class ChannelBufferEx {
+public class ChannelBufferEx1 {
     public static void main(String[] args) {
         try (RandomAccessFile file = new RandomAccessFile("data/even.txt", "rw");
              FileChannel channel = file.getChannel();) {
