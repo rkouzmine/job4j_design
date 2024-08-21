@@ -28,7 +28,7 @@ public class ChannelBufferEx {
             }
             System.out.println(sb);
 
-            String text = "19\n21\n";
+            String text = "19\n21\n23\n";
 /*
             ByteBuffer buffer2 = ByteBuffer.allocate(text.getBytes().length);
             buffer2.put(text.getBytes());
