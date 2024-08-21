@@ -8,7 +8,7 @@ import java.nio.channels.FileChannel;
 
 public class ChannelBufferEx {
     public static void main(String[] args) {
-        try (RandomAccessFile file = new RandomAccessFile("data/404.txt", "rw");
+        try (RandomAccessFile file = new RandomAccessFile("data/even.txt", "rw");
              FileChannel channel = file.getChannel();) {
 
             ByteBuffer buffer = ByteBuffer.allocate(100);
@@ -27,6 +27,17 @@ public class ChannelBufferEx {
                 byteRead = channel.read(buffer);
             }
             System.out.println(sb);
+
+            String text = "19\n21\n";
+/*
+            ByteBuffer buffer2 = ByteBuffer.allocate(text.getBytes().length);
+            buffer2.put(text.getBytes());
+            buffer2.flip();
+            channel.write(buffer2);
+ */
+            ByteBuffer buffer2 = ByteBuffer.wrap(text.getBytes());
+            channel.write(buffer2);
+
 
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
