@@ -1,0 +1,8 @@
+<?xml version="1.1" encoding="UTF-8" ?>
+<car isElectric="false" model="Geely Coolray" year="2022">
+    <engine horsePower="170"/>
+    <features>
+        <feature>Air Conditioning</feature>
+        <feature>Navigation System</feature>
+    </features>
+</car>
