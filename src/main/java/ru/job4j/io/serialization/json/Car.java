@@ -17,6 +17,26 @@ public class Car {
         this.features = features;
     }
 
+    public boolean isElectric() {
+        return isElectric;
+    }
+
+    public String getModel() {
+        return model;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public String[] getFeatures() {
+        return features;
+    }
+
     @Override
     public String toString() {
         return "Car{"

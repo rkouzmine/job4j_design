@@ -7,6 +7,10 @@ public class Engine {
         this.horsePower = horsePower;
     }
 
+    public int getHorsePower() {
+        return horsePower;
+    }
+
     @Override
     public String toString() {
         return "Engine{"
