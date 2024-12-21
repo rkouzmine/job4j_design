@@ -1,36 +1,35 @@
-create TABLE film_companies (
-    id            SERIAL PRIMARY KEY,
-    name          VARCHAR(255) NOT NULL,
-    country       VARCHAR(50),
-    founding_year INTEGER
+create table musician_bands (
+    id serial primary key,
+    title varchar(255) not null,
+    country varchar(50),
+    genre varchar(50),
+    founding_year integer
 );
 
-create TABLE directors (
-    id          SERIAL PRIMARY KEY,
-    name        VARCHAR(255) NOT NULL,
-    birth_date  DATE,
-    nationality VARCHAR(50)
+create table albums (
+    id serial primary key,
+    name VARCHAR(255) NOT NULL,
+    release_year integer,
+    release_country varchar(255),
+    label varchar(255),
+    musician_bands_id integer references musician_bands (id)
 );
 
-create TABLE movies (
-    id           SERIAL PRIMARY KEY,
-    title        VARCHAR(255) NOT NULL,
-    release_year INTEGER,
-    duration     INTEGER,
-    budget       NUMERIC(15, 2),
-    company_id   INTEGER REFERENCES film_companies (id),
-    director_id  INTEGER REFERENCES directors (id)
+create table songs (
+    id serial primary key,
+    name VARCHAR(255) NOT NULL,
+    duration_in_seconds integer,
+    albums_id integer references albums (id)
 );
 
-insert into musician_bands (title, country, genre, founding_year)
-values
+insert into musician_bands (title, country, genre, founding_year) values
     ('The Beatles', 'UK', 'Rock', 1960),
     ('Queen', 'UK', 'Rock', 1970),
     ('Metallica', 'USA', 'Heavy Metal', 1981),
     ('Led Zeppelin', 'UK', 'Hard Rock', 1968);
 
-insert into albums (name, release_year, release_country, label, musician_bands_id)
-values ('Abbey Road', 1969, 'UK', 'Apple Records', 1),
+insert into albums (name, release_year, release_country, label, musician_bands_id) values
+       ('Abbey Road', 1969, 'UK', 'Apple Records', 1),
        ('A Night at the Opera', 1975, 'UK', 'EMI Records', 2),
        ('Metallica', 1991, 'USA', 'Elektra', 3),
        ('Led Zeppelin IV', 1971, 'UK', 'Atlantic', 4),
@@ -43,8 +42,7 @@ values ('Abbey Road', 1969, 'UK', 'Apple Records', 1),
        ('Led Zeppelin III', 1970, 'UK', 'Atlantic', 4),
        ('Sheer Heart Attack', 1974, 'UK', 'Parlophone', 2);
 
-insert into songs (name, duration_in_seconds, albums_id)
-values
+insert into songs (name, duration_in_seconds, albums_id) values
     ('Come Together', 259, 1),
     ('You Never Give Me Your Money', 243, 1),
     ('Here Comes the Sun', 185, 1),
@@ -85,8 +83,8 @@ from musician_bands as mb
 inner join albums a on mb.id = a.musician_bands_id
 inner join songs s on a.id = s.albums_id
 where a.release_year > (
-					    select release_year + 10
-					    from albums
-					    where name ilike 'Abbey Road'
+            select release_year + 10
+			from albums
+			where name ilike 'Abbey Road'
                         )
 group by mb.title, a.name
