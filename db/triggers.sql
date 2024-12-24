@@ -7,13 +7,13 @@ create table products
     price    integer
 );
 
-create
-or replace function tax_first()
+--Task 1
+create or replace function tax_first()
     returns trigger as
 $$
     BEGIN
         update products
-        set price = price + price * 0.2
+        set price = price * 1.2
         where id = (select id from inserted);
         return new;
     END;
@@ -23,8 +23,7 @@ LANGUAGE 'plpgsql';
 create trigger tax_first_trigger
     after insert
     on products
-    referencing new table as
-                    inserted
+    referencing new table as inserted
     for each statement
     execute procedure tax_first();
 
@@ -36,21 +35,19 @@ values ('product_2', 'producer_2', 3, 150);
 
 select * from products;
 
-create
-or replace function tax_second()
+--Task2
+create or replace function tax_second()
     returns trigger as
 $$
     BEGIN
-        update products
-        set price = price + price * 0.2
-        where id = new.id;
+        new.price = new.price * 1.2;
         return NEW;
     END;
 $$
 LANGUAGE 'plpgsql';
 
 create trigger tax_second_trigger
-    after insert
+    before insert
     on products
     for each row
     execute procedure tax_second();
@@ -63,6 +60,7 @@ values ('product_4', 'producer_4', 4, 250);
 
 select * from products;
 
+--Task 3
 create table history_of_price
 (
     ID    serial primary key,
@@ -71,8 +69,7 @@ create table history_of_price
     date  timestamp
 );
 
-create
-or replace function tax_third()
+create or replace function tax_third()
     returns trigger as
 $$
     BEGIN
