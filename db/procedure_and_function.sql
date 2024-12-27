@@ -111,3 +111,57 @@ drop function f_update_data(u_count integer, tax float, u_id integer);
 
 delete from products;
 alter sequence products_id_seq RESTART with 1;
+
+insert into products (name, producer, count, price) values
+('Product A', 'Producer A', 0, 100),
+('Product B', 'Producer B', 10, 50),
+('Product C', 'Producer C', 5, 30),
+('Product D', 'Producer D', 0, 0);
+
+create or replace procedure delete_data()
+language 'plpgsql'
+AS $$
+    begin
+        delete from products
+        where count = 0;
+end;
+$$;
+
+call delete_data();
+
+create or replace procedure delete_data(d_id integer)
+language 'plpgsql'
+as $$
+	begin
+		delete from products
+		where id = d_id;
+	end;
+$$;
+
+call delete_data(1);
+
+create or replace function f_delete_data()
+returns void
+language 'plpgsql'
+as $$
+	begin
+		delete from products
+		where price = 0;
+	end;
+$$;
+
+select f_delete_data();
+
+create or replace function f_delete_data(d_id integer)
+returns void
+language 'plpgsql'
+as $$
+    begin
+        delete from products
+        where id = d_id;
+    end;
+$$;
+
+select f_delete_data(3);
+
+select * from products;
