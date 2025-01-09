@@ -31,7 +31,7 @@ insert into users(name, surname, gender) values
 ('Сергей', 'Иванов', 'мужской');
 
 insert into user_addresses(street, house, flat, user_id) values
-('1-ый Казанческий переулок', 'д.14', null, 1),
+('1-ый Казанческий переулок', 'д. 14', null, 1),
 ('ул. Центральная', 'д. 40', 'кв. 74', 2),
 ('ул. Ленина', 'д. 7', 'кв. 130', 2);
 
