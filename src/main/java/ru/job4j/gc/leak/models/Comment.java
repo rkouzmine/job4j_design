@@ -8,6 +8,11 @@ public class Comment {
 
     private User user;
 
+    public Comment(String text, User user) {
+        this.text = text;
+        this.user = user;
+    }
+
     public User getUser() {
         return user;
     }
@@ -39,5 +44,13 @@ public class Comment {
     @Override
     public int hashCode() {
         return Objects.hash(text, user);
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{"
+                + "text='" + text + '\''
+                + ", user=" + user
+                + '}';
     }
 }

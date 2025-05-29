@@ -7,14 +7,16 @@ import java.util.Scanner;
 
 public class Menu {
 
-    public static final Integer ADD_POST = 1;
-    public static final Integer ADD_MANY_POST = 2;
-    public static final Integer SHOW_ALL_POSTS = 3;
-    public static final Integer DELETE_POST = 4;
+    public static final int ADD_POST = 1;
+    public static final int ADD_MANY_POST = 2;
+    public static final int SHOW_ALL_POSTS = 3;
+    public static final int DELETE_ALL_POSTS = 4;
+    public static final int DELETE_POST_BY_ID = 5;
 
     public static final String SELECT = "Выберите меню";
     public static final String COUNT = "Выберите количество создаваемых постов";
     public static final String TEXT_OF_POST = "Введите текст";
+    public static final String TEXT_OF_POST_BY_ID = "Введите ID, который требуется удалить";
     public static final String EXIT = "Конец работы";
 
     public static final String MENU = """
@@ -22,6 +24,7 @@ public class Menu {
                 Введите 2, чтобы создать определенное количество постов.
                 Введите 3, чтобы показать все посты.
                 Введите 4, чтобы удалить все посты.
+                Введите 5, чтобы удалить пост по ID.
                 Введите любое другое число для выхода.
             """;
 
@@ -29,9 +32,11 @@ public class Menu {
         Random random = new Random();
         UserGenerator userGenerator = new UserGenerator(random);
         CommentGenerator commentGenerator = new CommentGenerator(random, userGenerator);
-        Scanner scanner = new Scanner(System.in);
         PostStore postStore = new PostStore();
-        start(commentGenerator, scanner, userGenerator, postStore);
+
+        try (Scanner scanner = new Scanner(System.in)) {
+            start(commentGenerator, scanner, userGenerator, postStore);
+        }
     }
 
     private static void start(CommentGenerator commentGenerator, Scanner scanner, UserGenerator userGenerator, PostStore postStore) {
@@ -39,16 +44,14 @@ public class Menu {
         while (run) {
             System.out.println(MENU);
             System.out.println(SELECT);
-            int userChoice = Integer.parseInt(scanner.nextLine());
+            int userChoice = Integer.parseInt(scanner.nextLine().trim());
             System.out.println(userChoice);
             if (ADD_POST == userChoice) {
                 System.out.println(TEXT_OF_POST);
                 String text = scanner.nextLine();
                 userGenerator.generate();
                 commentGenerator.generate();
-                var post = new Post();
-                post.setText(text);
-                post.setComments(CommentGenerator.getComments());
+                var post = new Post(text, commentGenerator.getComments());
                 var saved = postStore.add(post);
                 System.out.println("Generate: " + saved.getId());
             } else if (ADD_MANY_POST == userChoice) {
@@ -66,10 +69,15 @@ public class Menu {
                 System.out.println();
                 memUsage();
             } else if (SHOW_ALL_POSTS == userChoice) {
-                System.out.println(PostStore.getPosts());
-            } else if (DELETE_POST == userChoice) {
+                System.out.println(postStore.getPosts());
+            } else if (DELETE_ALL_POSTS == userChoice) {
                 System.out.println("Удаление всех постов ...");
                 postStore.removeAll();
+            } else if (DELETE_POST_BY_ID == userChoice) {
+                System.out.println(TEXT_OF_POST_BY_ID);
+                int id = Integer.parseInt(scanner.nextLine().trim());
+                postStore.removeById(id);
+                System.out.printf("Пост с ID - %d удален ...%n", id);
             } else {
                 run = false;
                 System.out.println(EXIT);
@@ -90,9 +98,6 @@ public class Menu {
                                    PostStore postStore, String text) {
         userGenerator.generate();
         commentGenerator.generate();
-        var post = new Post();
-        post.setText(text);
-        post.setComments(CommentGenerator.getComments());
-        postStore.add(post);
+        postStore.add(new Post(text, commentGenerator.getComments()));
     }
 }
