@@ -15,34 +15,40 @@ public class DirFileCache extends AbstractCache<String, String> {
     @Override
     protected String load(String key) {
         Path path = Path.of(cachingDir, key);
-        String result = null;
-        if (Files.exists(path)) {
-            if (Files.isRegularFile(path)) {
-                if (Files.isReadable(path)) {
-                    try {
-                        result = Files.readString(path);
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                } else {
-                    System.out.println(String.format(
-                            "Недостаточно прав для чтения файла '%s'. Проверьте права доступа к файлу.",
-                            key
-                    ));
-                }
-            } else {
-                System.out.println(String.format(
-                        "Путь '%s' указывает на директорию, а не на файл. Укажите имя файла.",
-                        path.toAbsolutePath()
-                ));
-            }
-        } else {
-            System.out.println(String.format(
-                    "Файл '%s' не найден в директории '%s'.",
-                    key,
-                    cachingDir
-            ));
+        validatePath(path);
+        String result;
+        try {
+            result = Files.readString(path);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
         return result;
     }
+
+    private void validatePath(Path path) {
+        if (!Files.exists(path)) {
+            throw new IllegalArgumentException(
+                    String.format("Файл '%s' не найден в директории '%s'.",
+                            path.getFileName(),
+                            path.getParent().toAbsolutePath()
+                    ));
+        }
+
+        if (!Files.isRegularFile(path)) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Путь '%s' указывает на директорию, а не на файл. Укажите имя файла.",
+                            path.toAbsolutePath()
+                    ));
+        }
+
+        if (!Files.isReadable(path)) {
+            throw new IllegalArgumentException(
+                    String.format(
+                            "Недостаточно прав для чтения файла '%s'. Проверьте права доступа к файлу.",
+                            path.getFileName()
+                    ));
+        }
+    }
+
 }
