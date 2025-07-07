@@ -8,7 +8,8 @@ import static org.assertj.core.api.Assertions.*;
 import java.util.Calendar;
 import java.util.List;
 
-@Disabled("Удалить аннотацию после реализации всех методов")
+@Disabled("РЈРґР°Р»РёС‚СЊ Р°РЅРЅРѕС‚Р°С†РёСЋ РїРѕСЃР»Рµ СЂРµР°Р»РёР·Р°С†РёРё РІСЃРµС… РјРµС‚РѕРґРѕРІ")
+
 public class Cinema3DTest {
     @Test
     public void whenBuyThenGetTicket() {
