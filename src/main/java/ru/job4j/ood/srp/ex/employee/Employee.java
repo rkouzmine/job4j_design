@@ -1,4 +1,4 @@
-package ru.job4j.ood.srp.employee;
+package ru.job4j.ood.srp.ex.employee;
 
 public class Employee {
     private String name;

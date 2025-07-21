@@ -1,4 +1,4 @@
-package ru.job4j.ood.srp.product;
+package ru.job4j.ood.srp.ex.product;
 
 public class ProductPrinter implements Printer {
 

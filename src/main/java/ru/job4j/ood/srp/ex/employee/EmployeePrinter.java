@@ -1,6 +1,4 @@
-package ru.job4j.ood.srp.employee;
-
-import java.util.List;
+package ru.job4j.ood.srp.ex.employee;
 
 public class EmployeePrinter implements Printer<Employee> {
     private final Repository<Employee> repository;

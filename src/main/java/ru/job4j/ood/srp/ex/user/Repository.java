@@ -1,4 +1,4 @@
-package ru.job4j.ood.srp.user;
+package ru.job4j.ood.srp.ex.user;
 
 import java.util.List;
 
