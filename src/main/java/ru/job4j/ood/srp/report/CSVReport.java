@@ -1,5 +1,6 @@
 package ru.job4j.ood.srp.report;
 
+
 import ru.job4j.ood.srp.formatter.DateTimeParser;
 import ru.job4j.ood.srp.model.Employee;
 import ru.job4j.ood.srp.store.Store;
@@ -7,12 +8,12 @@ import ru.job4j.ood.srp.store.Store;
 import java.util.Calendar;
 import java.util.function.Predicate;
 
-public class ReportEngine implements Report {
+public class CSVReport implements Report {
 
     private final Store store;
     private final DateTimeParser<Calendar> dateTimeParser;
 
-    public ReportEngine(Store store, DateTimeParser<Calendar> dateTimeParser) {
+    public CSVReport(Store store, DateTimeParser<Calendar> dateTimeParser) {
         this.store = store;
         this.dateTimeParser = dateTimeParser;
     }
@@ -22,11 +23,12 @@ public class ReportEngine implements Report {
         StringBuilder text = new StringBuilder();
         text.append("Name; Hired; Fired; Salary;")
                 .append(System.lineSeparator());
+
         for (Employee employee : store.findBy(filter)) {
-            text.append(employee.getName()).append(" ")
-                    .append(dateTimeParser.parse(employee.getHired())).append(" ")
-                    .append(dateTimeParser.parse(employee.getFired())).append(" ")
-                    .append(String.format("%.2f", employee.getSalary()))
+            text.append(employee.getName()).append(";")
+                    .append(dateTimeParser.parse(employee.getHired())).append(";")
+                    .append(dateTimeParser.parse(employee.getFired())).append(";")
+                    .append(String.format("%.2f", employee.getSalary())).append(";")
                     .append(System.lineSeparator());
         }
         return text.toString();
