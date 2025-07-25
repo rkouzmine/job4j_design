@@ -10,9 +10,10 @@ public class IntPoolExample {
         System.out.println(heap1 == heap2);
 
         System.out.println();
-
+/*
         Integer pool3 = new Integer(127);
         Integer pool4 = new Integer(127);
         System.out.println(pool3 == pool4);
+ */
     }
 }
