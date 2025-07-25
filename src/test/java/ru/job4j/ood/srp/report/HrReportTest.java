@@ -24,10 +24,20 @@ class HrReportTest {
 
         Report result = new HrReport(store, new SalaryDescComparator());
 
-        String expected = String.format(
-                "Name; Salary;%nAlice 500,00%nAlex 300,00%nBob 100,00%n"
-        );
-        assertThat(result.generate(employee -> true)).isEqualTo(expected);
+        StringBuilder expected = new StringBuilder()
+                .append("Name; Salary;")
+                .append(System.lineSeparator())
+                .append(workerFirst.getName()).append(" ")
+                .append(String.format("%.2f", workerFirst.getSalary()))
+                .append(System.lineSeparator())
+                .append(workerThird.getName()).append(" ")
+                .append(String.format("%.2f", workerThird.getSalary()))
+                .append(System.lineSeparator())
+                .append(workerSecond.getName()).append(" ")
+                .append(String.format("%.2f", workerSecond.getSalary()))
+                .append(System.lineSeparator());
+
+        assertThat(result.generate(employee -> true)).isEqualTo(expected.toString());
     }
 
 }
