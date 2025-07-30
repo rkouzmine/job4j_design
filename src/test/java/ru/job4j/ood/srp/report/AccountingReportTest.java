@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.*;
 class AccountingReportTest {
 
     @Test
-   public void whenConvertedRUBtoUSD() {
+    public void whenConvertedRUBtoUSD() {
         MemoryStore store = new MemoryStore();
         Calendar now = Calendar.getInstance();
         Employee worker = new Employee("Ivan", now, now, 100);
@@ -32,7 +32,7 @@ class AccountingReportTest {
                 .append(worker.getName()).append(" ")
                 .append(parser.parse(worker.getHired())).append(" ")
                 .append(parser.parse(worker.getFired())).append(" ")
-                .append(String.format("%.2f", currencyConverter.convert(Currency.RUB, worker.getSalary(), Currency.USD)))
+                .append(currencyConverter.convert(Currency.RUB, worker.getSalary(), Currency.USD))
                 .append(System.lineSeparator());
         assertThat(result.generate(employee -> true)).isEqualTo(expected.toString());
     }

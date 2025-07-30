@@ -27,7 +27,7 @@ public class HrReport implements Report {
 
         for (Employee employee : employees) {
             text.append(employee.getName()).append(" ")
-                    .append(String.format("%.2f", employee.getSalary()))
+                    .append(employee.getSalary())
                     .append(System.lineSeparator());
         }
         return text.toString();

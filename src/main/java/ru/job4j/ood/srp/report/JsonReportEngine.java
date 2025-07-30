@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import ru.job4j.ood.srp.formatter.DateTimeParser;
 import ru.job4j.ood.srp.formatter.ReportDateTimeParser;
 import ru.job4j.ood.srp.model.Employee;
+import ru.job4j.ood.srp.model.EmployeeJson;
 import ru.job4j.ood.srp.store.Store;
 
 import java.util.*;
@@ -23,14 +24,9 @@ public class JsonReportEngine implements Report {
 
     @Override
     public String generate(Predicate<Employee> filter) {
-        List<Map<String, Object>> employeeList = new ArrayList<>();
+       List<EmployeeJson> employeeList = new ArrayList<>();
         for (Employee employee : store.findBy(filter)) {
-            Map<String, Object> map = new LinkedHashMap<>();
-            map.put("name", employee.getName());
-            map.put("hired", dateTimeParser.parse(employee.getHired()));
-            map.put("fired", dateTimeParser.parse(employee.getFired()));
-            map.put("salary", employee.getSalary());
-            employeeList.add(map);
+            employeeList.add(new EmployeeJson(employee, dateTimeParser));
         }
         return gson.toJson(employeeList);
     }

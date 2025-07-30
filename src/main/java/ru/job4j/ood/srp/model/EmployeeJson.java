@@ -15,7 +15,5 @@ public class EmployeeJson {
         this.hired = dateTimeParser.parse(employee.getHired());
         this.fired = dateTimeParser.parse(employee.getFired());
         this.salary = employee.getSalary();
-
-
     }
 }

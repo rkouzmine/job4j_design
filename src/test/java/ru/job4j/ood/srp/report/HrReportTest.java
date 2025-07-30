@@ -28,13 +28,13 @@ class HrReportTest {
                 .append("Name; Salary;")
                 .append(System.lineSeparator())
                 .append(workerFirst.getName()).append(" ")
-                .append(String.format("%.2f", workerFirst.getSalary()))
+                .append(workerFirst.getSalary())
                 .append(System.lineSeparator())
                 .append(workerThird.getName()).append(" ")
-                .append(String.format("%.2f", workerThird.getSalary()))
+                .append(workerThird.getSalary())
                 .append(System.lineSeparator())
                 .append(workerSecond.getName()).append(" ")
-                .append(String.format("%.2f", workerSecond.getSalary()))
+                .append(workerSecond.getSalary())
                 .append(System.lineSeparator());
 
         assertThat(result.generate(employee -> true)).isEqualTo(expected.toString());

@@ -35,7 +35,7 @@ public class AccountingReport implements Report {
             text.append(employee.getName()).append(" ")
                     .append(dateTimeParser.parse(employee.getHired())).append(" ")
                     .append(dateTimeParser.parse(employee.getFired())).append(" ")
-                    .append(String.format("%.2f", currencyConverter.convert(source, employee.getSalary(), target)))
+                    .append(currencyConverter.convert(source, employee.getSalary(), target))
                     .append(System.lineSeparator());
         }
         return text.toString();

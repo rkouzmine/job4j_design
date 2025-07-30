@@ -28,7 +28,7 @@ public class CSVReport implements Report {
             text.append(employee.getName()).append(";")
                     .append(dateTimeParser.parse(employee.getHired())).append(";")
                     .append(dateTimeParser.parse(employee.getFired())).append(";")
-                    .append(String.format("%.2f", employee.getSalary())).append(";")
+                    .append(employee.getSalary()).append(";")
                     .append(System.lineSeparator());
         }
         return text.toString();

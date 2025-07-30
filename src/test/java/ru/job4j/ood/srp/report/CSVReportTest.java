@@ -29,7 +29,7 @@ class CSVReportTest {
                 .append(worker.getName()).append(";")
                 .append(parser.parse(worker.getHired())).append(";")
                 .append(parser.parse(worker.getFired())).append(";")
-                .append(String.format("%.2f", worker.getSalary())).append(";")
+                .append(worker.getSalary()).append(";")
                 .append(System.lineSeparator());
         assertThat(result.generate(employee -> true)).isEqualTo(expected.toString());
     }

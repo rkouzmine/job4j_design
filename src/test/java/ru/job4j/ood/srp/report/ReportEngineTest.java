@@ -26,7 +26,7 @@ public class ReportEngineTest {
                 .append(worker.getName()).append(" ")
                 .append(parser.parse(worker.getHired())).append(" ")
                 .append(parser.parse(worker.getFired())).append(" ")
-                .append(String.format("%.2f", worker.getSalary()))
+                .append(worker.getSalary())
                 .append(System.lineSeparator());
         assertThat(engine.generate(employee -> true)).isEqualTo(expected.toString());
     }
