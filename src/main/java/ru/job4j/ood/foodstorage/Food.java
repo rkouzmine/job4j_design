@@ -7,9 +7,9 @@ public class Food {
     private LocalDateTime expiryDate;
     private LocalDateTime createDate;
     private double price;
-    private int discount;
+    private double discount;
 
-    public Food(String name, LocalDateTime expiryDate, LocalDateTime createDate, double price, int discount) {
+    public Food(String name, LocalDateTime expiryDate, LocalDateTime createDate, double price, double discount) {
         this.name = name;
         this.expiryDate = expiryDate;
         this.createDate = createDate;
@@ -49,7 +49,7 @@ public class Food {
         this.price = price;
     }
 
-    public int getDiscount() {
+    public double getDiscount() {
         return discount;
     }
 

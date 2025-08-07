@@ -6,5 +6,5 @@ public interface Store<T> {
     void add(T t);
     void remove(T t);
     List<T> findByName(String name);
-    List<T> findAll();
+    List<T> getAll();
 }

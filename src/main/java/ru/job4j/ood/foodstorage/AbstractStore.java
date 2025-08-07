@@ -29,7 +29,7 @@ public abstract class AbstractStore implements Store<Food> {
     }
 
     @Override
-    public List<Food> findAll() {
-        return foodlist;
+    public List<Food> getAll() {
+        return new ArrayList<>(foodlist);
     }
 }

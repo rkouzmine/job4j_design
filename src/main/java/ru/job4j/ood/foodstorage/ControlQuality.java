@@ -8,4 +8,11 @@ public class ControlQuality {
     public ControlQuality(List<Store> stores) {
         this.stores = stores;
     }
+
+    public void distribute(Food food) {
+        for (Store store : stores) {
+            stores.add(store);
+            break;
+        }
+    }
 }
