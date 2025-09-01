@@ -26,6 +26,13 @@ public class ParkingCar implements Parking<Car> {
         return sizeSecond;
     }
 
+    public List<ParkingPlace> getPassengerPlaces() {
+        return passengerPlaces;
+    }
+
+    public List<ParkingPlace> getTruckPlaces() {
+        return truckPlaces;
+    }
 
     @Override
     public void add(Car car) {
@@ -35,5 +42,18 @@ public class ParkingCar implements Parking<Car> {
     @Override
     public void remove(Car car) {
 
+    }
+
+    @Override
+    public List<Car> getAll() {
+        return null;
+    }
+
+    public List<Car> getCarsFromParkingSpaces(List<ParkingPlace> passengerPlaces) {
+        List<Car> result = new ArrayList<>();
+        for (ParkingPlace place : passengerPlaces) {
+            result.add(place.getCar());
+        }
+        return result;
     }
 }
