@@ -1,7 +1,7 @@
 package ru.job4j.ood.parking.model.car;
 
 public class PassengerCar extends Car {
-    private final int parkingSpaceSize = 1;
+
     public PassengerCar(String number) {
         super(number);
     }
@@ -11,7 +11,8 @@ public class PassengerCar extends Car {
         return super.getNumber();
     }
 
+    @Override
     public int getParkingSpaceSize() {
-        return parkingSpaceSize;
+        return 1;
     }
 }

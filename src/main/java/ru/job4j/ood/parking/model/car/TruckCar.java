@@ -13,6 +13,7 @@ public class TruckCar extends Car {
         return super.getNumber();
     }
 
+    @Override
     public int getParkingSpaceSize() {
         return parkingSpaceSize;
     }

@@ -14,7 +14,13 @@ public class ParkingCar implements Parking<Car> {
 
     public ParkingCar(int sizeFirst, int sizeSecond) {
         this.sizeFirst = sizeFirst;
+        for (int i = 1; i <= sizeFirst; i++) {
+            passengerPlaces.add(new ParkingPlace());
+        }
         this.sizeSecond = sizeSecond;
+        for (int i = 1; i <= sizeSecond; i++) {
+            truckPlaces.add(new ParkingPlace());
+        }
     }
 
     public int getSizeFirst() {
@@ -36,6 +42,20 @@ public class ParkingCar implements Parking<Car> {
 
     @Override
     public void add(Car car) {
+       int size = car.getParkingSpaceSize();
+       if (size == 1) {
+           for (ParkingPlace place : passengerPlaces) {
+               if (place.getCar() == null) {
+                   place.park(car);
+               }
+           }
+       } else if (size > 1) {
+           for (ParkingPlace place : truckPlaces) {
+               if (place.getCar() == null) {
+                   place.park(car);
+               }
+           }
+       }
 
     }
 
