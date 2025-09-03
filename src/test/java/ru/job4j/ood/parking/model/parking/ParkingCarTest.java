@@ -37,7 +37,7 @@ public class ParkingCarTest {
 
     @Test
     public void whenTruckCarsAddInPassengerPlaces() {
-        ParkingCar parking = new ParkingCar(3, 2);
+        ParkingCar parking = new ParkingCar(3, 1);
         Car passengerCar = new PassengerCar("A001");
         Car truckCarFirst = new TruckCar("A002", 2);
         Car truckCarSecond = new TruckCar("A003", 2);
@@ -54,6 +54,16 @@ public class ParkingCarTest {
         Car truckCar = new TruckCar("A002", 2);
         parking.add(truckCar);
         assertThat(parking.getAll()).isEmpty();
+    }
+
+    @Test
+    public void whenAddTruckCarAndNotEnoughPassengerPlacesThenFail2() {
+        ParkingCar parking = new ParkingCar(4, 0);
+        Car truckCar = new TruckCar("A002", 2);
+        Car truckCar2 = new TruckCar("A003", 2);
+        parking.add(truckCar);
+        parking.add(truckCar2);
+        assertThat(parking.getParkedCars(parking.getPassengerPlaces())).contains(truckCar2);
     }
 
     @Test

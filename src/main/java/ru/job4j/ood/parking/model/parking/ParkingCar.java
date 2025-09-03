@@ -3,7 +3,9 @@ package ru.job4j.ood.parking.model.parking;
 import ru.job4j.ood.parking.model.car.Car;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ParkingCar implements Parking<Car> {
     private final int sizeFirst;
@@ -68,7 +70,6 @@ public class ParkingCar implements Parking<Car> {
                     return;
                 }
             }
-        } else {
             int freeCount = 0;
             int startIndex = -1;
 
@@ -91,7 +92,6 @@ public class ParkingCar implements Parking<Car> {
                     startIndex = -1;
                 }
             }
-
         }
 
     }
@@ -104,17 +104,28 @@ public class ParkingCar implements Parking<Car> {
     @Override
     public List<Car> getAll() {
         List<Car> result = new ArrayList<>();
-        for (ParkingPlace place : passengerPlaces) {
-            result.add(place.getCar());
-        }
+        result.addAll(getParkedCars(passengerPlaces));
+        result.addAll(getParkedCars(truckPlaces));
         return result;
     }
 
     public List<Car> getCarsFromParkingSpaces(List<ParkingPlace> passengerPlaces) {
         List<Car> result = new ArrayList<>();
         for (ParkingPlace place : passengerPlaces) {
-            result.add(place.getCar());
+            if (place.getCar() != null) {
+                result.add(place.getCar());
+            }
         }
         return result;
+    }
+
+    public List<Car> getParkedCars(List<ParkingPlace> places) {
+        Set<Car> result = new LinkedHashSet<>();
+        for (ParkingPlace place : places) {
+            if (place.getCar() != null) {
+                result.add(place.getCar());
+            }
+        }
+        return new ArrayList<>(result);
     }
 }
