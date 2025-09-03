@@ -15,4 +15,12 @@ public abstract class Car {
     public int getParkingSpaceSize() {
         return parkingSpaceSize;
     }
+
+    @Override
+    public String toString() {
+        return "Car{"
+                + "number='" + number + '\''
+                + ", parkingSpaceSize=" + parkingSpaceSize
+                + '}';
+    }
 }

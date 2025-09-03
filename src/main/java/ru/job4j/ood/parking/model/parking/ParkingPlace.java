@@ -10,8 +10,13 @@ public class ParkingPlace {
     }
 
     public void park(Car car) {
+        this.car = car;
     }
 
     public void release(Car car) {
+    }
+
+    public String toString() {
+        return car != null ? car.toString() : "[empty]";
     }
 }

@@ -41,21 +41,58 @@ public class ParkingCar implements Parking<Car> {
     }
 
     @Override
+    public String toString() {
+        return "ParkingCar{"
+                + "sizeFirst=" + sizeFirst
+                + ", sizeSecond=" + sizeSecond
+                + ", passengerPlaces=" + passengerPlaces
+                + ", truckPlaces=" + truckPlaces
+                + '}';
+    }
+
+    @Override
     public void add(Car car) {
-       int size = car.getParkingSpaceSize();
-       if (size == 1) {
-           for (ParkingPlace place : passengerPlaces) {
-               if (place.getCar() == null) {
-                   place.park(car);
-               }
-           }
-       } else if (size > 1) {
-           for (ParkingPlace place : truckPlaces) {
-               if (place.getCar() == null) {
-                   place.park(car);
-               }
-           }
-       }
+        int sizeCar = car.getParkingSpaceSize();
+
+        if (sizeCar == 1) {
+            for (ParkingPlace place : passengerPlaces) {
+                if (place.getCar() == null) {
+                    place.park(car);
+                    return;
+                }
+            }
+        } else if (sizeCar > 1) {
+            for (ParkingPlace place : truckPlaces) {
+                if (place.getCar() == null) {
+                    place.park(car);
+                    return;
+                }
+            }
+        } else {
+            int freeCount = 0;
+            int startIndex = -1;
+
+            for (int i = 0; i < passengerPlaces.size(); i++) {
+                if (passengerPlaces.get(i).getCar() == null) {
+                    if (freeCount == 0) {
+                        startIndex = i;
+                    }
+                    freeCount++;
+
+                    if (freeCount == sizeCar) {
+                        for (int j = 0; j < sizeCar; j++) {
+                            passengerPlaces.get(startIndex + j).park(car);
+                        }
+                        return;
+
+                    }
+                } else {
+                    freeCount = 0;
+                    startIndex = -1;
+                }
+            }
+
+        }
 
     }
 
@@ -66,7 +103,11 @@ public class ParkingCar implements Parking<Car> {
 
     @Override
     public List<Car> getAll() {
-        return null;
+        List<Car> result = new ArrayList<>();
+        for (ParkingPlace place : passengerPlaces) {
+            result.add(place.getCar());
+        }
+        return result;
     }
 
     public List<Car> getCarsFromParkingSpaces(List<ParkingPlace> passengerPlaces) {
