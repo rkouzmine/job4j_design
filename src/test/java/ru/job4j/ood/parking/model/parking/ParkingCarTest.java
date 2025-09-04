@@ -16,7 +16,7 @@ public class ParkingCarTest {
         ParkingCar parking = new ParkingCar(4, 2);
         Car passengerCar = new PassengerCar("A001");
         parking.add(passengerCar);
-        assertThat(parking.getAll()).containsExactly(passengerCar);
+        assertThat(parking.getAllCars()).containsExactly(passengerCar);
     }
 
     @Test
@@ -24,7 +24,7 @@ public class ParkingCarTest {
         ParkingCar parking = new ParkingCar(4, 2);
         Car truckCar = new TruckCar("A002", 2);
         parking.add(truckCar);
-        assertThat(parking.getAll()).containsExactly(truckCar);
+        assertThat(parking.getAllCars()).containsExactly(truckCar);
     }
 
     @Test
@@ -32,11 +32,11 @@ public class ParkingCarTest {
         ParkingCar parking = new ParkingCar(2, 0);
         Car truckCar = new TruckCar("A002", 2);
         parking.add(truckCar);
-        assertThat(parking.getAll()).containsExactly(truckCar);
+        assertThat(parking.getAllCars()).containsExactly(truckCar);
     }
 
     @Test
-    public void whenTruckCarsAddInPassengerPlaces() {
+    public void whenTruckAndPassengerCarsAddInPassengerPlaces() {
         ParkingCar parking = new ParkingCar(3, 1);
         Car passengerCar = new PassengerCar("A001");
         Car truckCarFirst = new TruckCar("A002", 2);
@@ -44,8 +44,9 @@ public class ParkingCarTest {
         parking.add(passengerCar);
         parking.add(truckCarFirst);
         parking.add(truckCarSecond);
-        var result = parking.getCarsFromParkingSpaces(parking.getPassengerPlaces());
-        assertThat(result).containsExactly(truckCarSecond);
+        var result = parking.getParkingSpaces(parking.getPassengerPlaces());
+        assertThat(result).contains(passengerCar);
+        assertThat(result).contains(truckCarSecond);
     }
 
     @Test
@@ -53,31 +54,92 @@ public class ParkingCarTest {
         ParkingCar parking = new ParkingCar(1, 0);
         Car truckCar = new TruckCar("A002", 2);
         parking.add(truckCar);
-        assertThat(parking.getAll()).isEmpty();
+        assertThat(parking.getAllCars()).isEmpty();
     }
 
     @Test
     public void whenAddTruckCarAndNotEnoughPassengerPlacesThenFail2() {
         ParkingCar parking = new ParkingCar(4, 0);
-        Car truckCar = new TruckCar("A002", 2);
-        Car truckCar2 = new TruckCar("A003", 2);
-        parking.add(truckCar);
-        parking.add(truckCar2);
-        assertThat(parking.getParkedCars(parking.getPassengerPlaces())).contains(truckCar2);
+        Car truckCarFirst = new TruckCar("A002", 2);
+        Car truckCarSecond = new TruckCar("A003", 2);
+        parking.add(truckCarFirst);
+        parking.add(truckCarSecond);
+        assertThat(parking.getParkingSpaces(parking.getPassengerPlaces())).contains(truckCarSecond);
     }
 
     @Test
     public void whenAddAndRemoveCarsThenParkingIsEmpty() {
-        ParkingCar parking = new ParkingCar(1, 2);
+        ParkingCar parking = new ParkingCar(1, 3);
         Car passengerCar = new PassengerCar("A001");
-        Car truckCar = new TruckCar("A002", 2);
+        Car truckCar = new TruckCar("A002", 3);
         parking.add(passengerCar);
         parking.add(truckCar);
-        assertThat(parking.getAll()).containsExactly(passengerCar);
-        assertThat(parking.getAll()).containsExactly(truckCar);
+        assertThat(parking.getAllCars()).contains(passengerCar);
+        assertThat(parking.getAllCars()).contains(truckCar);
         parking.remove(passengerCar);
         parking.remove(truckCar);
-        assertThat(parking.getAll()).isEmpty();
+        assertThat(parking.getAllCars()).isEmpty();
+    }
+
+    @Test
+    public void whenConditionOfParkingSpaces() {
+        ParkingCar parking = new ParkingCar(5, 1);
+        Car passengerCarFirst = new PassengerCar("A001");
+        Car passengerCarSecond = new PassengerCar("A002");
+        Car truckCarFirst = new TruckCar("A003", 2);
+        Car truckCarSecond = new TruckCar("A004", 3);
+        parking.add(passengerCarFirst);
+        parking.add(passengerCarSecond);
+        parking.add(truckCarFirst);
+        parking.add(truckCarSecond);
+        String result = parking.toString();
+        String expected = "ParkingCar{sizeFirst=5, sizeSecond=1, "
+                + "passengerPlaces=["
+                + "ParkingPlace{placeId=1, car=Car{number='A001', parkingSpaceSize=1}}, "
+                + "ParkingPlace{placeId=2, car=Car{number='A002', parkingSpaceSize=1}}, "
+                + "ParkingPlace{placeId=3, car=Car{number='A004', parkingSpaceSize=3}}, "
+                + "ParkingPlace{placeId=4, car=Car{number='A004', parkingSpaceSize=3}}, "
+                + "ParkingPlace{placeId=5, car=Car{number='A004', parkingSpaceSize=3}}], "
+                + "truckPlaces=["
+                + "ParkingPlace{placeId=1, car=Car{number='A003', parkingSpaceSize=2}}]}";
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenGetAllCarsThenReturnUniqueCarsInExpectedOrder() {
+        ParkingCar parking = new ParkingCar(5, 1);
+        Car passengerCarFirst = new PassengerCar("A001");
+        Car passengerCarSecond = new PassengerCar("A002");
+        Car truckCarFirst = new TruckCar("A003", 2);
+        Car truckCarSecond = new TruckCar("A004", 3);
+        parking.add(passengerCarFirst);
+        parking.add(passengerCarSecond);
+        parking.add(truckCarFirst);
+        parking.add(truckCarSecond);
+        String result = parking.getAllCars().toString();
+        String expected = "[Car{number='A001', parkingSpaceSize=1}, "
+                + "Car{number='A002', parkingSpaceSize=1}, "
+                + "Car{number='A004', parkingSpaceSize=3}, "
+                + "Car{number='A003', parkingSpaceSize=2}]";
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    public void whenNegativePassengerPlacesThenThrowException() {
+        int sizeFirst = -1;
+        int sizeSecond = 2;
+        assertThatThrownBy(() -> new ParkingCar(sizeFirst, sizeSecond))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("The number of parking spaces for passenger cars cannot be negative: " + sizeFirst);
+    }
+
+    @Test
+    public void whenNegativeTruckPlacesThenThrowException() {
+        int sizeFirst = 2;
+        int sizeSecond = -1;
+        assertThatThrownBy(() -> new ParkingCar(sizeFirst, sizeSecond))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessage("The number of parking spaces for truck cars cannot be negative: " + sizeSecond);
     }
 
 }

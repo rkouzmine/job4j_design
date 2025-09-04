@@ -3,7 +3,16 @@ package ru.job4j.ood.parking.model.parking;
 import ru.job4j.ood.parking.model.car.Car;
 
 public class ParkingPlace {
+    private final int placeId;
     private Car car;
+
+    public ParkingPlace(int placeId) {
+        this.placeId = placeId;
+    }
+
+    public int getPlaceId() {
+        return placeId;
+    }
 
     public Car getCar() {
         return car;
@@ -14,9 +23,23 @@ public class ParkingPlace {
     }
 
     public void release(Car car) {
+        this.car = null;
     }
 
+    @Override
     public String toString() {
-        return car != null ? car.toString() : "[empty]";
+        String result;
+        if (car != null) {
+            result = "ParkingPlace{"
+                    + "placeId=" + placeId
+                    + ", car=" + car
+                    + '}';
+
+        } else {
+            result = "[empty]";
+        }
+        return result;
+
     }
+
 }

@@ -2,26 +2,29 @@ package ru.job4j.ood.parking.model.parking;
 
 import ru.job4j.ood.parking.model.car.Car;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ParkingCar implements Parking<Car> {
     private final int sizeFirst;
     private final int sizeSecond;
 
-    private List<ParkingPlace> passengerPlaces = new ArrayList<>();
-    private List<ParkingPlace> truckPlaces = new ArrayList<>();
+    private final List<ParkingPlace> passengerPlaces = new ArrayList<>();
+    private final List<ParkingPlace> truckPlaces = new ArrayList<>();
 
     public ParkingCar(int sizeFirst, int sizeSecond) {
+        if (sizeFirst < 0) {
+            throw new IllegalArgumentException("The number of parking spaces for passenger cars cannot be negative: " + sizeFirst);
+        }
+        if (sizeSecond < 0) {
+            throw new IllegalArgumentException("The number of parking spaces for truck cars cannot be negative: " + sizeSecond);
+        }
         this.sizeFirst = sizeFirst;
         for (int i = 1; i <= sizeFirst; i++) {
-            passengerPlaces.add(new ParkingPlace());
+            passengerPlaces.add(new ParkingPlace(i));
         }
         this.sizeSecond = sizeSecond;
         for (int i = 1; i <= sizeSecond; i++) {
-            truckPlaces.add(new ParkingPlace());
+            truckPlaces.add(new ParkingPlace(i));
         }
     }
 
@@ -53,79 +56,88 @@ public class ParkingCar implements Parking<Car> {
     }
 
     @Override
-    public void add(Car car) {
-        int sizeCar = car.getParkingSpaceSize();
+    public boolean add(Car car) {
+        int size = car.getParkingSpaceSize();
+        boolean parked = false;
+        if (size == 1) {
+            parked = parkInFirstAvailable(passengerPlaces, car);
+        } else if (size > 1) {
+            parked = parkInFirstAvailable(truckPlaces, car);
+            if (!parked) {
+                parked = parkInFirstAvailableSequence(passengerPlaces, car, size);
+            }
+        }
+        return parked;
+    }
 
-        if (sizeCar == 1) {
+    private boolean parkInFirstAvailable(List<ParkingPlace> places, Car car) {
+        boolean result = false;
+        for (ParkingPlace place : places) {
+            if (place.getCar() == null) {
+                place.park(car);
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    private boolean parkInFirstAvailableSequence(List<ParkingPlace> places, Car car, int size) {
+        boolean result = false;
+        for (int i = 0; i <= places.size() - size && !result; i++) {
+            boolean canFit = true;
+            for (int j = 0; j < size; j++) {
+                if (places.get(i + j).getCar() != null) {
+                    canFit = false;
+                    break;
+                }
+            }
+            if (canFit) {
+                for (int j = 0; j < size; j++) {
+                    places.get(i + j).park(car);
+                }
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean remove(Car car) {
+        boolean result = false;
+        if (car.getParkingSpaceSize() == 1) {
             for (ParkingPlace place : passengerPlaces) {
-                if (place.getCar() == null) {
-                    place.park(car);
-                    return;
+                if (place.getCar() != null && place.getCar().equals(car)) {
+                    place.release(car);
+                    result = true;
                 }
             }
-        } else if (sizeCar > 1) {
+        } else if (car.getParkingSpaceSize() > 1) {
             for (ParkingPlace place : truckPlaces) {
-                if (place.getCar() == null) {
-                    place.park(car);
-                    return;
+                if (place.getCar() != null && place.getCar().equals(car)) {
+                    place.release(car);
+                    result = true;
                 }
-            }
-            int freeCount = 0;
-            int startIndex = -1;
-
-            for (int i = 0; i < passengerPlaces.size(); i++) {
-                if (passengerPlaces.get(i).getCar() == null) {
-                    if (freeCount == 0) {
-                        startIndex = i;
-                    }
-                    freeCount++;
-
-                    if (freeCount == sizeCar) {
-                        for (int j = 0; j < sizeCar; j++) {
-                            passengerPlaces.get(startIndex + j).park(car);
-                        }
-                        return;
-
-                    }
-                } else {
-                    freeCount = 0;
-                    startIndex = -1;
-                }
-            }
-        }
-
-    }
-
-    @Override
-    public void remove(Car car) {
-
-    }
-
-    @Override
-    public List<Car> getAll() {
-        List<Car> result = new ArrayList<>();
-        result.addAll(getParkedCars(passengerPlaces));
-        result.addAll(getParkedCars(truckPlaces));
-        return result;
-    }
-
-    public List<Car> getCarsFromParkingSpaces(List<ParkingPlace> passengerPlaces) {
-        List<Car> result = new ArrayList<>();
-        for (ParkingPlace place : passengerPlaces) {
-            if (place.getCar() != null) {
-                result.add(place.getCar());
             }
         }
         return result;
     }
 
-    public List<Car> getParkedCars(List<ParkingPlace> places) {
-        Set<Car> result = new LinkedHashSet<>();
+    public List<Car> getParkingSpaces(List<ParkingPlace> places) {
+        List<Car> result = new ArrayList<>();
         for (ParkingPlace place : places) {
             if (place.getCar() != null) {
                 result.add(place.getCar());
             }
         }
-        return new ArrayList<>(result);
+        return result;
+    }
+
+    @Override
+    public List<Car> getAllCars() {
+        List<Car> result = new ArrayList<>();
+        result.addAll(new LinkedHashSet<>(getParkingSpaces(passengerPlaces)));
+        result.addAll(new LinkedHashSet<>(getParkingSpaces(truckPlaces)));
+        return result;
     }
 }
