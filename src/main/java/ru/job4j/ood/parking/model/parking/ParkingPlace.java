@@ -3,7 +3,9 @@ package ru.job4j.ood.parking.model.parking;
 import ru.job4j.ood.parking.model.car.Car;
 
 public class ParkingPlace {
+
     private final int placeId;
+
     private Car car;
 
     public ParkingPlace(int placeId) {
@@ -12,6 +14,10 @@ public class ParkingPlace {
 
     public int getPlaceId() {
         return placeId;
+    }
+
+    public boolean isFree() {
+        return car == null;
     }
 
     public Car getCar() {

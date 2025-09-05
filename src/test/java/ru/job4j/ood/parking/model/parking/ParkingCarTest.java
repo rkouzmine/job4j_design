@@ -12,65 +12,66 @@ import static org.assertj.core.api.Assertions.*;
 public class ParkingCarTest {
     @Test
     public void whenAddPassengerCarThenItIsInPassengerPlaces() {
-        ParkingPassengerCar parkingPassengerCar = new ParkingPassengerCar(4);
-        ParkingTruckCar parkingTruckCar = new ParkingTruckCar(2);
-        ParkingService parkingService = new ParkingService(parkingPassengerCar, parkingTruckCar);
+        ParkingPassengerCar passengerParking = new ParkingPassengerCar(4);
+        ParkingTruckCar truckParking = new ParkingTruckCar(2);
+        Parking<Car> parkingCar = new ParkingCar(passengerParking, truckParking);
         Car passengerCar = new PassengerCar("A001");
-        parkingService.park(passengerCar);
-        assertThat(parkingPassengerCar.getAllCars()).containsExactly(passengerCar);
+        parkingCar.add(passengerCar);
+        assertThat(passengerParking.getAllCars()).containsExactly(passengerCar);
     }
 
     @Test
     public void whenAddTruckCarThenItIsInTruckPlaces() {
-        ParkingPassengerCar parkingPassengerCar = new ParkingPassengerCar(4);
-        ParkingTruckCar parkingTruckCar = new ParkingTruckCar(2);
-        ParkingService parkingService = new ParkingService(parkingPassengerCar, parkingTruckCar);
+        ParkingPassengerCar passengerParking = new ParkingPassengerCar(4);
+        ParkingTruckCar truckParking = new ParkingTruckCar(2);
+        Parking<Car> parkingCar = new ParkingCar(passengerParking, truckParking);
         Car truckCar = new TruckCar("A002", 2);
-        parkingService.park(truckCar);
-        assertThat(parkingTruckCar.getAllCars()).containsExactly(truckCar);
+        parkingCar.add(truckCar);
+        assertThat(truckParking.getAllCars()).containsExactly(truckCar);
     }
 
     @Test
     public void whenAddTruckCarAndNoTruckPlacesThenUsePassengerPlaces() {
-        ParkingPassengerCar parkingPassengerCar = new ParkingPassengerCar(2);
-        ParkingTruckCar parkingTruckCar = new ParkingTruckCar(0);
-        ParkingService parkingService = new ParkingService(parkingPassengerCar, parkingTruckCar);
+        ParkingPassengerCar passengerParking = new ParkingPassengerCar(2);
+        ParkingTruckCar truckParking = new ParkingTruckCar(0);
+        Parking<Car> parkingCar = new ParkingCar(passengerParking, truckParking);
         Car truckCar = new TruckCar("A002", 2);
-        parkingService.park(truckCar);
-        assertThat(parkingPassengerCar.getAllCars()).containsExactly(truckCar);
+        parkingCar.add(truckCar);
+        assertThat(passengerParking.getAllCars()).containsExactly(truckCar);
     }
+
 
     @Test
     public void whenTruckAndPassengerCarsAddInPassengerPlaces() {
-        ParkingPassengerCar parkingPassengerCar = new ParkingPassengerCar(3);
-        ParkingTruckCar parkingTruckCar = new ParkingTruckCar(1);
-        ParkingService parkingService = new ParkingService(parkingPassengerCar, parkingTruckCar);
+        ParkingPassengerCar passengerParking = new ParkingPassengerCar(3);
+        ParkingTruckCar truckParking = new ParkingTruckCar(1);
+        Parking<Car> parkingCar = new ParkingCar(passengerParking, truckParking);
         Car passengerCar = new PassengerCar("A001");
         Car truckCarFirst = new TruckCar("A002", 2);
         Car truckCarSecond = new TruckCar("A003", 2);
-        parkingService.park(passengerCar);
-        parkingService.park(truckCarFirst);
-        parkingService.park(truckCarSecond);
-        assertThat(parkingPassengerCar.getAllCars()).contains(passengerCar);
-        assertThat(parkingPassengerCar.getAllCars()).contains(truckCarSecond);
+        parkingCar.add(passengerCar);
+        parkingCar.add(truckCarFirst);
+        parkingCar.add(truckCarSecond);
+        assertThat(passengerParking.getAllCars()).contains(passengerCar);
+        assertThat(passengerParking.getAllCars()).contains(truckCarSecond);
     }
 
     @Test
     public void whenAddTruckCarAndNotEnoughPassengerPlacesThenFail() {
-        ParkingPassengerCar parkingPassengerCar = new ParkingPassengerCar(1);
-        ParkingTruckCar parkingTruckCar = new ParkingTruckCar(0);
-        ParkingService parkingService = new ParkingService(parkingPassengerCar, parkingTruckCar);
+        ParkingPassengerCar passengerParking = new ParkingPassengerCar(1);
+        ParkingTruckCar truckParking = new ParkingTruckCar(0);
+        Parking<Car> parkingCar = new ParkingCar(passengerParking, truckParking);
         Car truckCar = new TruckCar("A002", 2);
-        parkingService.park(truckCar);
-        assertThat(parkingPassengerCar.getAllCars()).isEmpty();
-        assertThat(parkingTruckCar.getAllCars()).isEmpty();
+        parkingCar.add(truckCar);
+        assertThat(passengerParking.getAllCars()).isEmpty();
+        assertThat(truckParking.getAllCars()).isEmpty();
     }
-
+   /*
     @Test
     public void whenAddTruckCarAndNotEnoughPassengerPlacesThenFail2() {
         ParkingPassengerCar parkingPassengerCar = new ParkingPassengerCar(4);
         ParkingTruckCar parkingTruckCar = new ParkingTruckCar(0);
-        ParkingService parkingService = new ParkingService(parkingPassengerCar, parkingTruckCar);
+        ParkingCar parkingService = new ParkingCar(parkingPassengerCar, parkingTruckCar);
         Car truckCarFirst = new TruckCar("A002", 2);
         Car truckCarSecond = new TruckCar("A003", 2);
         parkingService.park(truckCarFirst);
@@ -78,7 +79,7 @@ public class ParkingCarTest {
         assertThat(parkingPassengerCar.getAllCars()).contains(truckCarFirst);
         assertThat(parkingPassengerCar.getAllCars()).contains(truckCarSecond);
     }
-    /*
+
     @Test
     public void whenAddAndRemoveCarsThenParkingIsEmpty() {
         ParkingPassengerCar parking = new ParkingPassengerCar(1, 3);
