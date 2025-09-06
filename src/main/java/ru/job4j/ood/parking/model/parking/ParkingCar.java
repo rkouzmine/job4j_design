@@ -3,57 +3,80 @@ package ru.job4j.ood.parking.model.parking;
 import ru.job4j.ood.parking.model.car.Car;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 public class ParkingCar implements Parking<Car> {
-    private final int sizeFirst;
-    private final int sizeSecond;
 
-    private List<ParkingPlace> passengerPlaces = new ArrayList<>();
-    private List<ParkingPlace> truckPlaces = new ArrayList<>();
+    private final ParkingPassengerCar passengerParking;
+    private final ParkingTruckCar truckParking;
 
-    public ParkingCar(int sizeFirst, int sizeSecond) {
-        this.sizeFirst = sizeFirst;
-        this.sizeSecond = sizeSecond;
+    public ParkingCar(ParkingPassengerCar passengerParking, ParkingTruckCar truckParking) {
+        this.passengerParking = passengerParking;
+        this.truckParking = truckParking;
     }
 
-    public int getSizeFirst() {
-        return sizeFirst;
+    public ParkingPassengerCar getPassengerParking() {
+        return passengerParking;
     }
 
-
-    public int getSizeSecond() {
-        return sizeSecond;
-    }
-
-    public List<ParkingPlace> getPassengerPlaces() {
-        return passengerPlaces;
-    }
-
-    public List<ParkingPlace> getTruckPlaces() {
-        return truckPlaces;
+    public ParkingTruckCar getTruckParking() {
+        return truckParking;
     }
 
     @Override
-    public void add(Car car) {
-
-    }
-
-    @Override
-    public void remove(Car car) {
-
-    }
-
-    @Override
-    public List<Car> getAll() {
-        return null;
-    }
-
-    public List<Car> getCarsFromParkingSpaces(List<ParkingPlace> passengerPlaces) {
-        List<Car> result = new ArrayList<>();
-        for (ParkingPlace place : passengerPlaces) {
-            result.add(place.getCar());
+    public boolean add(Car car) {
+        boolean result = false;
+        if (car.getParkingSpaceSize() == 1) {
+            result = passengerParking.add(car);
+        } else if (car.getParkingSpaceSize() > 1) {
+            result = truckParking.add(car);
+            if (!result) {
+                result = tryParkTruckInPassenger(car);
+            }
         }
         return result;
+    }
+
+    private boolean tryParkTruckInPassenger(Car car) {
+        boolean result = false;
+        int size = car.getParkingSpaceSize();
+        var places = passengerParking.getPlaces();
+        for (int i = 0; i <= places.size() - size; i++) {
+            int j = 0;
+            while (j < size && places.get(i + j).isFree()) {
+                j++;
+            }
+            if (j == size) {
+                for (int k = 0; k < size; k++) {
+                    places.get(i + k).park(car);
+                }
+                result = true;
+                break;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public boolean remove(Car car) {
+        return car.getParkingSpaceSize() == 1 ? passengerParking.remove(car) : truckParking.remove(car);
+    }
+
+    @Override
+    public List<Car> findAllCar() {
+        Set<Car> result = new LinkedHashSet<>();
+        result.addAll(passengerParking.findAllCar());
+        result.addAll(truckParking.findAllCar());
+        return new ArrayList<>(result);
+    }
+
+    @Override
+    public String toString() {
+        return "ParkingCar{"
+                + "passengerParking=" + passengerParking
+                + ", truckParking=" + truckParking
+                + '}';
     }
 }

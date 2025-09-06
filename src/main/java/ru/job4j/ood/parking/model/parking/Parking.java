@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface Parking<T> {
 
-    void add(T t);
+    boolean add(T t);
 
-    void remove(T t);
+    boolean remove(T t);
 
-    List<T> getAll();
+    List<T> findAllCar();
 
 }

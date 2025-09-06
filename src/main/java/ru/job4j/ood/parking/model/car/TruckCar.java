@@ -4,16 +4,7 @@ public class TruckCar extends Car {
     private final int parkingSpaceSize;
 
     public TruckCar(String number, int parkingSpaceSize) {
-        super(number);
+        super(number, parkingSpaceSize);
         this.parkingSpaceSize = parkingSpaceSize;
-    }
-
-    @Override
-    public String getNumber() {
-        return super.getNumber();
-    }
-
-    public int getParkingSpaceSize() {
-        return parkingSpaceSize;
     }
 }
