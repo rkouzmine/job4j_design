@@ -1,14 +1,9 @@
 package ru.job4j.ood.isp.car;
 
-public class Tesla implements Car {
+public class Tesla implements Chargeable, HasTrunk {
     @Override
     public void openTrunk() {
         System.out.println("С багажником");
-    }
-
-    @Override
-    public void refuel() {
-        throw new UnsupportedOperationException("Электромобиль не заправляется бензином");
     }
 
     @Override

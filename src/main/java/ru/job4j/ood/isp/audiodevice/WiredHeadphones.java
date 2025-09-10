@@ -1,19 +1,13 @@
 package ru.job4j.ood.isp.audiodevice;
 
-public class WiredHeadphones implements AudioDevice {
-    @Override
-    public void playMusic() {
-        System.out.println("Умеют проигрывать музыку");
-
-    }
-
+public class WiredHeadphones implements MusicPlayable, MicrophoneUsable {
     @Override
     public void useMicrophone() {
-        System.out.println("Есть микрофон");
-
+        System.out.println("Умеют проигрывать музыку");
     }
 
-    public void connectBluetooth() {
-        throw new UnsupportedOperationException("Проводные наушники не поддерживают Bluetooth");
+    @Override
+    public void playMusic() {
+        System.out.println("Есть микрофон");
     }
 }

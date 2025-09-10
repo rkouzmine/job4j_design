@@ -1,6 +1,5 @@
 package ru.job4j.ood.isp.weapon;
 
-public interface Weapon {
+public interface Shootable {
     void canShoot();
-    void canReload();
 }
