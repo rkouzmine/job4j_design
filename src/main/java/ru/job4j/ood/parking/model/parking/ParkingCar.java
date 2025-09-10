@@ -61,7 +61,7 @@ public class ParkingCar implements Parking<Car> {
 
     @Override
     public boolean remove(Car car) {
-        return car.getParkingSpaceSize() == 1 ? passengerParking.remove(car) : truckParking.remove(car);
+        return passengerParking.remove(car) || truckParking.remove(car);
     }
 
     @Override
