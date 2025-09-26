@@ -16,4 +16,6 @@ public interface Store<T> {
 
     List<T> getAll();
 
+    void clear();
+
 }

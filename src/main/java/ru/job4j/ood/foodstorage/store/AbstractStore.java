@@ -44,4 +44,9 @@ public abstract class AbstractStore implements Store<Food> {
     public List<Food> getAll() {
         return List.copyOf(foodlist);
     }
+
+    @Override
+    public void clear() {
+        foodlist.clear();
+    }
 }

@@ -2,6 +2,7 @@ package ru.job4j.ood.foodstorage.service;
 
 import ru.job4j.ood.foodstorage.store.Store;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControlQuality<T> {
@@ -17,6 +18,18 @@ public class ControlQuality<T> {
                 store.add(t);
                 break;
             }
+        }
+    }
+
+    public void resort() {
+        List<T> list = new ArrayList<>();
+        for (Store<T> store : stores) {
+            list.addAll(store.getAll());
+            store.clear();
+        }
+
+        for (T t : list) {
+            distribute(t);
         }
     }
 }

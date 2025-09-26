@@ -44,4 +44,35 @@ class ControlQualityTest {
                 .containsExactly(cheese);
     }
 
+    @Test
+    void whenResortThenProductsRedistributed() {
+        Warehouse warehouse = new Warehouse();
+        Shop shop = new Shop();
+        Trash trash = new Trash();
+
+        ControlQuality<Food> controlQuality = new ControlQuality<>(List.of(warehouse, shop, trash));
+
+        LocalDate now = LocalDate.now();
+
+        Food bread = new Food("Bread", now, now.minusDays(7), 100.0, 20);
+        Food milk = new Food("Milk", now, now.minusDays(10), 50.0, 20);
+        Food yogurt = new Food("Yogurt", now.plusDays(7), now.minusDays(3), 200.0, 20);
+        Food cheese = new Food("Cheese", now.plusDays(1), now.minusDays(4), 15.0, 20);
+
+        warehouse.add(bread);
+        warehouse.add(milk);
+        warehouse.add(cheese);
+        warehouse.add(yogurt);
+
+        controlQuality.resort();
+
+        assertThat(trash.getAll())
+                .containsExactlyInAnyOrder(bread, milk);
+
+        assertThat(shop.getAll())
+                .containsExactlyInAnyOrder(cheese, yogurt);
+
+        assertThat(warehouse.getAll().isEmpty()).isTrue();
+    }
+
 }
